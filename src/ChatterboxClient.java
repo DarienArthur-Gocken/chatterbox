@@ -166,7 +166,6 @@ public class ChatterboxClient {
         this.port = options.getPort();
         this.username = options.getUsername();
         this.password = options.getPassword();
-        // TODO: copy options.getHost(), getPort(), getUsername(), getPassword() into fields
     }
 
     /**
@@ -188,8 +187,8 @@ public class ChatterboxClient {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8);
             this.serverReader = new BufferedReader(inputStreamReader);
 
-            OutputStream outputStream = socket.getOutputStream();
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8);
+            this.userOutput = socket.getOutputStream();
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.userOutput, java.nio.charset.StandardCharsets.UTF_8);
             this.serverWriter = new BufferedWriter(outputStreamWriter);
         } catch (IOException e) {
             System.out.println("Socket failed to be constructed.");
