@@ -220,6 +220,7 @@ public class ChatterboxClient {
         String initialPrompt = serverReader.readLine();
         while(initialPrompt != null && initialPrompt.length() > 0) {
             userOutput.write(initialPrompt.getBytes());
+            userOutput.flush();
             initialPrompt = serverReader.readLine();
         }
         
@@ -236,6 +237,13 @@ public class ChatterboxClient {
             throw new IllegalArgumentException(response);
         }
 
+        userOutput.write(response.getBytes());
+        userOutput.flush();
+
+        while ((response = serverReader.readLine()) != null && response.length() > 0) {
+            userOutput.write((response + "\n").getBytes());
+            userOutput.flush();
+        }
 
     }
 
