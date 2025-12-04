@@ -219,12 +219,12 @@ public class ChatterboxClient {
     public void authenticate() throws IOException, IllegalArgumentException {
         String initialPrompt = serverReader.readLine();
         while(initialPrompt != null && initialPrompt.length() > 0) {
-            userOutput.write(initialPrompt.getBytes());
+            userOutput.write((initialPrompt + "\n").getBytes());
             userOutput.flush();
             initialPrompt = serverReader.readLine();
         }
         
-        serverWriter.write(username + " " + password);
+        serverWriter.write(username + " " + password + "\n");
         serverWriter.flush();
 
         String response = serverReader.readLine();
