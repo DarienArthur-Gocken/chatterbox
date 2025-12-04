@@ -191,6 +191,9 @@ public class ChatterboxClient {
             OutputStream outputStream = socket.getOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8);
             this.serverWriter = new BufferedWriter(outputStreamWriter);
+        } catch (IOException e) {
+            System.out.println("Socket failed to be constructed.");
+            return;
         }
 
         // Make sure to have this.serverReader and this.serverWriter set by the end of this method!
