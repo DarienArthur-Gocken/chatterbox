@@ -231,10 +231,12 @@ public class ChatterboxClient {
             throw new IOException("Server didn't reply.");
         }
 
-        String errorCatch = response.toLowerCase();
+        String errorCatch = response.toLowerCase().substring(0, 4);
         if(errorCatch.contains("error")) {
             throw new IllegalArgumentException(response);
         }
+
+
     }
 
     /**
