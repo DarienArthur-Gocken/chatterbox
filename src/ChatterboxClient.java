@@ -186,11 +186,11 @@ public class ChatterboxClient {
         try(Socket socket = new Socket(getHost(), getPort())) {
             InputStream inputStream = socket.getInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8);
-            serverReader = new BufferedReader(inputStreamReader);
+            this.serverReader = new BufferedReader(inputStreamReader);
 
             OutputStream outputStream = socket.getOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8);
-            serverWriter = new BufferedWriter(outputStreamWriter);
+            this.serverWriter = new BufferedWriter(outputStreamWriter);
         }
 
         // Make sure to have this.serverReader and this.serverWriter set by the end of this method!
