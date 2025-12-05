@@ -182,18 +182,14 @@ public class ChatterboxClient {
      * @throws IOException if the socket cannot be opened
      */
     public void connect() throws IOException {
-        try(Socket socket = new Socket(getHost(), getPort())) {
-            InputStream inputStream = socket.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8);
-            this.serverReader = new BufferedReader(inputStreamReader);
+        Socket socket = new Socket(getHost(), getPort());
+        InputStream inputStream = socket.getInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        this.serverReader = new BufferedReader(inputStreamReader);
 
-            this.userOutput = socket.getOutputStream();
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.userOutput, java.nio.charset.StandardCharsets.UTF_8);
-            this.serverWriter = new BufferedWriter(outputStreamWriter);
-        } catch (IOException e) {
-            System.out.println("Socket failed to be constructed.");
-            return;
-        }
+        OutputStream outputStream = socket.getOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+        this.serverWriter = new BufferedWriter(outputStreamWriter);
     }
 
     /**
@@ -218,22 +214,19 @@ public class ChatterboxClient {
      */
     public void authenticate() throws IOException, IllegalArgumentException {
         String initialPrompt = serverReader.readLine();
-        while(initialPrompt != null && initialPrompt.length() > 0) {
-            userOutput.write((initialPrompt + "\n").getBytes());
-            userOutput.flush();
-            initialPrompt = serverReader.readLine();
-        }
-        
-        serverWriter.write(username + " " + password + "\n");
-        serverWriter.flush();
+        userOutput.write((initialPrompt).getBytes());
+        userOutput.flush();
+
+        this.serverWriter.write(this.username + " " + this.password);
+        this.serverWriter.flush();
 
         String response = serverReader.readLine();
         if(response == null) {
             throw new IOException("Server didn't reply.");
         }
 
-        String errorCatch = response.toLowerCase().substring(0, 4);
-        if(errorCatch.contains("error")) {
+        String errorCatch = response.toLowerCase();
+        if (errorCatch.startsWith("error")) {
             throw new IllegalArgumentException(response);
         }
 
@@ -241,7 +234,7 @@ public class ChatterboxClient {
         userOutput.flush();
 
         while ((response = serverReader.readLine()) != null && response.length() > 0) {
-            userOutput.write((response + "\n").getBytes());
+            userOutput.write(response.getBytes());
             userOutput.flush();
         }
 
