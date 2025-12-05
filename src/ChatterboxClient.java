@@ -9,8 +9,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-import javax.imageio.IIOException;
-
 /**
  * A simple command-line chat client for the Chatterbox server.
  *
@@ -252,7 +250,10 @@ public class ChatterboxClient {
      * @throws IOException
      */
     public void streamChat() throws IOException { 
-        printIncomingChats();
+        Thread incoming = new Thread(() -> printIncomingChats());
+        Thread outgoing = new Thread(() -> sendOutgoingChats());
+        incoming.start();
+        outgoing.start();
     }
 
     /**
