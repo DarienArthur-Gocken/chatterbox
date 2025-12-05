@@ -231,10 +231,6 @@ public class ChatterboxClient {
 
         printToUser(response);
 
-        while ((response = serverReader.readLine()) != null && response.length() > 0) {
-            printToUser(response);
-        }
-
     }
 
     /**
@@ -301,22 +297,19 @@ public class ChatterboxClient {
      */
     public void sendOutgoingChats() {
         while(true) {
-            String line;
-            if(!userInput.hasNextLine()) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) { }
-                continue;
-            }
-            line = userInput.nextLine();
-
             try {
+                String line = userInput.nextLine();
                 writeToServer(line);
             } catch(IOException i) {
                 try {
                     printToUser("Failed to send message: " + i);
                 } catch (IOException e) { }
                 System.exit(1);
+            } catch(IllegalStateException e) {
+                try {
+                    printToUser("Input closed");
+                } catch (IOException ex) { }
+                System.exit(0);
             }
         }
     }
