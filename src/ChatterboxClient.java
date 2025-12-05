@@ -299,9 +299,25 @@ public class ChatterboxClient {
      *   print a message to userOutput and exit.
      */
     public void sendOutgoingChats() {
-        // Use the userInput to read, NOT System.in directly
-        // loop forever reading user input
-        // write to serverOutput
+        while(true) {
+            String line;
+            if(!userInput.hasNextLine()) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) { }
+                continue;
+            }
+            line = userInput.nextLine();
+
+            try {
+                writeToServer(line);
+            } catch(IOException i) {
+                try {
+                    printToUser("Failed to send message: " + i);
+                } catch (IOException e) { }
+                System.exit(1);
+            }
+        }
     }
 
     public void printToUser(String message) throws IOException {
