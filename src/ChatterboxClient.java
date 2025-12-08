@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -305,12 +306,7 @@ public class ChatterboxClient {
                     printToUser("Failed to send message: " + i);
                 } catch (IOException e) { }
                 System.exit(1);
-            } catch(IllegalStateException e) {
-                try {
-                    printToUser("Input closed");
-                } catch (IOException ex) { }
-                System.exit(0);
-            }
+            } catch(NoSuchElementException e) {}
         }
     }
 
