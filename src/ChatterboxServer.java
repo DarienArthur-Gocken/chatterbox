@@ -158,6 +158,7 @@ public class ChatterboxServer {
      * File format:
      * - whitespace-separated tokens
      * - interpreted as (user, pass) pairs
+     * test
      *
      * @param filename path to the credentials file
      * @return a map of username -> password
